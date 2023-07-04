@@ -11,12 +11,14 @@ const searchTariffZoneInput = document.querySelector('.search-tariff-zone__input
 const searchTariffZoneLists = document.querySelector('.search-tariff-zone__lists');
 const template = document.querySelector('.template');
 const configuredTariffZones = document.querySelector('.configured-tariff-zones');
+const saveSection = document.querySelector('.section-save');
 
 let tariffZones = []
 
 rateAreas.forEach((item) => {
     const configuredTariffZone = new ConfiguredTariffZone(template, item.name, item.id, () => {
-        configuredTariffZone.removeElement()
+        configuredTariffZone.removeElement();
+        // delete configuredTariffZone;
         tariffZones = tariffZones.filter(area => area.id !== item.id)
         li.querySelector('.search-tariff-zone__button').textContent = 'Добавить';
         checkSectionOnEmpty()
@@ -36,7 +38,7 @@ rateAreas.forEach((item) => {
             configuredTariffZones.append(el);
             tariffZones.push(item);
         }
-        checkSectionOnEmpty()
+        checkSectionOnEmpty();
     })
     const li = findZoneLi.createLi()
     searchTariffZoneLists.append(li)
@@ -49,8 +51,10 @@ findZone.setEventListeners()
 function checkSectionOnEmpty() {
     if (tariffZones.length === 0) {
         configuredTariffZones.style.display = 'none';
+        saveSection.style.display = 'none'
     } else {
         configuredTariffZones.style.display = 'block';
+        saveSection.style.display = 'inline-block'
     }
 }
 

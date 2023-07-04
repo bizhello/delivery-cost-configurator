@@ -9,11 +9,11 @@ export class InputValidator {
     attachEventListeners() {
       this.inputField.addEventListener('input', this.handleInput.bind(this));
     }
-  
-    handleInput() {
-      let inputValue = this.inputField.value;
-      inputValue = this.isCurrency ? this.formatCurrencyInput(inputValue) : this.formatWeightInput(inputValue);
-      this.inputField.value = inputValue;
+
+    handleInput(e) {
+      const inputValue = e.target.value;
+      const  newInputValue = this.isCurrency ? this.formatCurrencyInput(inputValue) : this.formatWeightInput(inputValue);
+      this.inputField.value = newInputValue;
     }
   
     formatWeightInput(inputValue) {
