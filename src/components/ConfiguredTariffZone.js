@@ -1,17 +1,18 @@
 export class ConfiguredTariffZone {
-    constructor(template, elementTitle, id, handleDeleteClick, handleBaseCostButton, handleRemoveMarkup) {
+    constructor(template, elementTitle, id, handleDeleteClick, handleBaseCostButton, handleRemoveMarkup, resConsole) {
         this._template = template;
         this._elementTitle = elementTitle;
         this._id = id;
         this._handleDeleteClick = handleDeleteClick;
         this._handleBaseCostButton = handleBaseCostButton;
         this._handleRemoveMarkup = handleRemoveMarkup;
+        this._resConsole = resConsole;
 
         this._baseCost = null;
         this._markupCost = null;
 
         this._count = 1
-        this._formIsValid = false;
+        this.formIsValid = false;
     }
 
     _checkRangeIntersection(arr) {
@@ -28,6 +29,19 @@ export class ConfiguredTariffZone {
             }
         }
         return false;
+    }
+
+    _isFindeError() {
+        let isError = false
+        const error = document.querySelectorAll('.error');
+
+        error.forEach((item) => {
+            if (item.style.display !== 'none') {
+                isError = true
+            }
+        })
+
+        return isError
     }
 
     _showPopup() {
@@ -74,7 +88,6 @@ export class ConfiguredTariffZone {
                 text.style.display = 'inline'
                 isError = true
             } else {
-                isError = false
                 text.style.display = 'none'
             }
         }
@@ -83,25 +96,35 @@ export class ConfiguredTariffZone {
             isError = true
         }
 
-        if (!isError) {
-            this._showPopup();
+        if (!isError && !this._isFindeError()) {
+            this._showPopup()
             this._formIsValid = true;
+
+            console.log('render: ', this._resConsole())
         } else {
             this._formIsValid = false
         }
     }
 
     createResObj() {
-        if (this._formIsValid) {
-            return {
-                'rate_area_id': this._id,
-                'base_charge_value': this.view.querySelector('.configured-tariff-zones__input').value,
-                'extra_charges': [
+        const inputWeightFrom = this.view.querySelectorAll('.configured-tariff-zones__input-weight-from');
+        const inputWeightTo = this.view.querySelectorAll('.configured-tariff-zones__input-weight-to');
+        const inputMarkupCost = this.view.querySelectorAll('.input-markup-cost');
+        const extraCharges = [];
 
-                ]
-            }
+        for (let i = 0; i < inputMarkupCost.length; i++) {
+            extraCharges.push({
+                "min_weight": inputWeightFrom[i].value,
+                "max_weight": inputWeightTo[i].value,
+                "charge_value": inputMarkupCost[i].value
+            })
         }
-        return null
+
+        return {
+            'rate_area_id': this._id,
+            'base_charge_value': this.view.querySelector('.configured-tariff-zones__input').value,
+            'extra_charges': extraCharges
+        }
     }
 
     _changeBaseCost = (e) => {

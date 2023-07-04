@@ -14,11 +14,17 @@ const configuredTariffZones = document.querySelector('.configured-tariff-zones')
 const saveSection = document.querySelector('.section-save');
 
 let tariffZones = []
+let arr = []
+
+function arrNull() {
+    setTimeout(() => {
+        arr = []
+    }, 1500);
+}
 
 rateAreas.forEach((item) => {
     const configuredTariffZone = new ConfiguredTariffZone(template, item.name, item.id, () => {
         configuredTariffZone.removeElement();
-        // delete configuredTariffZone;
         tariffZones = tariffZones.filter(area => area.id !== item.id)
         li.querySelector('.search-tariff-zone__button').textContent = 'Добавить';
         checkSectionOnEmpty()
@@ -26,6 +32,11 @@ rateAreas.forEach((item) => {
         configuredTariffZone.addMarkup();
     }, () => {
         configuredTariffZone.removeMarkup();
+    }, () => {
+        arr.push(configuredTariffZone.createResObj())
+        arrNull()
+
+        return arr
     })
     const findZoneLi = new FindZoneLi(item.id, item.name, () => {
         let findEl = tariffZones.some(area => area.id === item.id)
