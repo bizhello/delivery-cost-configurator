@@ -1,6 +1,6 @@
 .error {
     color: #cf4c3a;
-    display: none;
+    /* display: none; */
 
     position: absolute;
 }

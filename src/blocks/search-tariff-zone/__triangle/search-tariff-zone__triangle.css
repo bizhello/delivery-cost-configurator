@@ -1,4 +1,11 @@
 .search-tariff-zone__triangle {
+    position: absolute;
+    content: '';
     top: 33px;
     right: 33px;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 15px 10px 0 10px;
+    border-color: #000 transparent transparent transparent;
 }

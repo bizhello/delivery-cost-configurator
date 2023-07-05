@@ -1,50 +1,29 @@
 export class FindZone {
-    constructor(input, button, ul) {
+    constructor(input, button, handleButton, tarifZones, openTarifZones) {
         this.input = input;
         this.button = button;
-        this.ul = ul;
-        this.lis = ul.querySelectorAll('.search-tariff-zone__list');
-
-        this._timeoutId = null;
-
-        this.toggleDisplayUl = this.toggleDisplayUl.bind(this);
-        this.filterAreas = this.filterAreas.bind(this)
+        this.handleButton = handleButton;
+        this.tarifZones = tarifZones;
+        this.openTarifZones = openTarifZones;
+        
+        this.timeoutId = null;
     }
 
-    _openDiplayUl() {
-        this.ul.style.display = 'block';
-    }
-    _closeDiplayUl() {
-        this.ul.style.display = 'none';
+    setListener() {
+        this.button.addEventListener('click', this.handleButton);
+        this.input.addEventListener('input', this.searchAreas.bind(this));
     }
 
-    toggleDisplayUl() {
-        if (this.ul.style.display === 'none') {
-            this._openDiplayUl()
-        } else {
-            this._closeDiplayUl()
-        }
-    }
+    searchAreas() {
+        this.openTarifZones();
+        clearTimeout(this.timeoutId);
 
-    filterAreas() {
-        this._openDiplayUl()
-        clearTimeout(this._timeoutId)
-        this._timeoutId = setTimeout(() => {
-            for (let i = 0; i < this.lis.length; i++) {
-                const li = this.lis[i];
-                const text = li.textContent.toLowerCase();
-                if (text.includes(this.input.value.toLowerCase())) {
-                    li.style.display = 'flex';
-                } else {
-                    li.style.display = 'none';
-                }
-            }
-        }, 1000)
-    }
-
-    setEventListeners() {
-        this._closeDiplayUl()
-        this.input.addEventListener('input', this.filterAreas)
-        this.button.addEventListener('click', this.toggleDisplayUl)
+        this.timeoutId = setTimeout(() => {
+            const searchValue = this.input.value.toLowerCase();
+            this.tarifZones.forEach(tarifZone => {
+                const nameTarifZone = tarifZone.textContent.toLowerCase();
+                tarifZone.style.display = nameTarifZone.includes(searchValue) ? 'flex' : 'none';
+            });
+        }, 1000);
     }
 }

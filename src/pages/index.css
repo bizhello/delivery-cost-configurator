@@ -1,7 +1,6 @@
 @import url(../vendor/normalize.css);
 @import url(../vendor/fonts.css);
 
-
 @import url(../blocks/container/container.css);
 
 @import url(../blocks/footer/footer.css);
@@ -22,8 +21,6 @@
 @import url(../blocks/configured-tariff-zones/__input/configured-tariff-zones__input.css);
 @import url(../blocks/configured-tariff-zones/__base-cost/configured-tariff-zones__base-cost.css);
 @import url(../blocks/configured-tariff-zones/__result/configured-tariff-zones__result.css);
-@import url(../blocks/configured-tariff-zones/configured-tariff-zones.css);
-@import url(../blocks/configured-tariff-zones/__error/configured-tariff-zones__error.css);
 
 @import url(../blocks/error/error.css);
 @import url(../blocks/error/__base-cost/error__base-cost.css);

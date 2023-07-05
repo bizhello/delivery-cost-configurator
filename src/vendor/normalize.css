@@ -453,16 +453,6 @@ template {
   transition: 0s
 }
 
-.triangle {
-  content: '';
-  position: absolute;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 15px 10px 0 10px;
-  border-color: #000 transparent transparent transparent;
-}
-
 .article {
   padding: 10px;
   margin-top: 25px;
@@ -508,4 +498,12 @@ template {
 
 .position-relative {
   position: relative;
+}
+
+.display-block {
+  display: block;
+}
+
+.display-none {
+  display: none;
 }
