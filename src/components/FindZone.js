@@ -1,10 +1,10 @@
 export class FindZone {
-    constructor(input, button, handleButton, tarifZones, openTarifZones) {
+    constructor(input, button, handleButton, tariffZones, openTariffZones) {
         this.input = input;
         this.button = button;
         this.handleButton = handleButton;
-        this.tarifZones = tarifZones;
-        this.openTarifZones = openTarifZones;
+        this.tariffZones = tariffZones;
+        this.openTariffZones = openTariffZones;
         
         this.timeoutId = null;
     }
@@ -15,14 +15,14 @@ export class FindZone {
     }
 
     searchAreas() {
-        this.openTarifZones();
+        this.openTariffZones();
         clearTimeout(this.timeoutId);
 
         this.timeoutId = setTimeout(() => {
             const searchValue = this.input.value.toLowerCase();
-            this.tarifZones.forEach(tarifZone => {
-                const nameTarifZone = tarifZone.textContent.toLowerCase();
-                tarifZone.style.display = nameTarifZone.includes(searchValue) ? 'flex' : 'none';
+            this.tariffZones.forEach(tariffZone => {
+                const nameTariffZone = tariffZone.textContent.toLowerCase();
+                tariffZone.style.display = nameTariffZone.includes(searchValue) ? 'flex' : 'none';
             });
         }, 1000);
     }

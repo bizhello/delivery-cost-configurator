@@ -1,4 +1,4 @@
-export class TarifZone {
+export class TariffZone {
     constructor(id, name, handleButton) {
         this.id = id;
         this.name = name;

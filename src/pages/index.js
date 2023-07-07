@@ -4,8 +4,8 @@ import rateAreas from '../utils/rateAreas.js';
 
 import { FindZone } from '../components/FindZone'
 import { MountElement } from '../components/mountElement';
-import { TarifZone } from '../components/TarifZone';
-import { ConfigureTarifZone } from '../components/ConfigureTarifZone'
+import { TariffZone } from '../components/TariffZone';
+import { ConfigureTariffZone } from '../components/ConfigureTariffZone'
 import { SaveButton } from '../components/SaveButton'
 
 const searchTariffZoneInput = document.querySelector('.search-tariff-zone__input');
@@ -16,23 +16,23 @@ const sectionSaveButton = document.querySelector('.section-save__button');
 const sectionSave = document.querySelector('.section-save');
 
 //Список Тарифный Зон
-const tarifZonesArr = [];
+const tariffZonesArr = [];
 let formZonesArr = []
 
 // создаем и монтируем в дом список городов
 function initialZones() {
     rateAreas.forEach(({ id, name }) => {
-        const tarifZone = new TarifZone(id, name, handleButtonZone).createZone();
-        tarifZonesArr.push(tarifZone);
-        const mountTarifZone = new MountElement(tarifZone, searchTariffZoneLists);
-        mountTarifZone.mount();
+        const tariffZone = new TariffZone(id, name, handleButtonZone).createZone();
+        tariffZonesArr.push(tariffZone);
+        const mountTariffZone = new MountElement(tariffZone, searchTariffZoneLists);
+        mountTariffZone.mount();
     })
 }
 
 //Добавляем логику поиска
-const findZone = new FindZone(searchTariffZoneInput, searchTariffZoneTriangle, handleButtonSearch, tarifZonesArr, openTarifZones);
+const findZone = new FindZone(searchTariffZoneInput, searchTariffZoneTriangle, handleButtonSearch, tariffZonesArr, openTariffZones);
 //Создание кнопки сохранения форм
-const saveButton = new SaveButton(sectionSaveButton, OnClickSaveButton)
+const saveButton = new SaveButton(sectionSaveButton, onClickSaveButton)
 
 //нажатие на Кнопку добавить/удалить у Тарифной Зоны
 function handleButtonZone(id, name) {
@@ -48,9 +48,9 @@ function handleButtonZone(id, name) {
 
 //Cоздание формы
 function createForm(id, name) {
-    const configureTarifZone = new ConfigureTarifZone(id, name, removeForm).createElement();
+    const configureTariffZone = new ConfigureTariffZone(id, name, removeForm, onClickSaveButton).createElement();
 
-    return configureTarifZone;
+    return configureTariffZone;
 }
 
 //Монтирование Формы
@@ -63,7 +63,7 @@ function mountForm(form) {
 function addForm(id, name) {
     const form = createForm(id, name);
     mountForm(form);
-    hideOrshowElDependenciesOfForm(openElement)
+    hideOrShowElDependenciesOfForm(openElement)
 
     formZonesArr.push({ id, form })
 }
@@ -76,7 +76,7 @@ function removeForm(id) {
     button.textContent = 'Добавить'
     formZonesArr = formZonesArr.filter(item => item.id !== id);
 
-    hideOrshowElDependenciesOfForm(hideElement)
+    hideOrShowElDependenciesOfForm(hideElement)
 }
 
 //Открыть элемент
@@ -102,7 +102,7 @@ function hideOrshowEl(element) {
 }
 
 //Скрыть или открыть элементы в зависимости если ли в масиве Формы
-function hideOrshowElDependenciesOfForm(fnc) {
+function hideOrShowElDependenciesOfForm(fnc) {
     if (formZonesArr.length === 0) {
         fnc(configuredTariffZones);
         fnc(sectionSave);
@@ -114,12 +114,12 @@ function handleButtonSearch() {
     hideOrshowEl(searchTariffZoneLists)
 }
 // Отобразить список Тарифной Зоны
-function openTarifZones() {
+function openTariffZones() {
     openElement(searchTariffZoneLists)
 }
 
 //Нажатие на сохранени кнопки: 'Сохранить изменения'
-function OnClickSaveButton() {
+function onClickSaveButton() {
     console.log('click button SAVE-BUTTON')
 }
 
