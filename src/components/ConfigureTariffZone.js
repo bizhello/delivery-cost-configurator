@@ -1,22 +1,17 @@
 export class ConfigureTariffZone {
-    constructor(id, title, removeForm, onClickSaveButton) {
+    constructor(id, title, removeForm, checkRangeIntersection, formIsValid) {
+        this.buttonSave = document.querySelector('.section-save__button');
         this.template = document.querySelector('.template');
         this.templateMarkup = document.querySelector('.template-markup');
 
         this.id = id;
         this.title = title;
         this.removeForm = removeForm;
-
-        this.onClickSaveButton = () => {
-            console.log('222')
-            this._checkInputOnValid();
-            onClickSaveButton();
-        };
+        this.checkRangeIntersection = checkRangeIntersection;
+        this.formIsValid = formIsValid;
 
         this.currencyReg = /^[-+]?[0-9]+(\.[0-9]{2})?$/;
         this.weightReg = /^[0-9]+(\.[0-9]{3})?$/;
-
-        this.countMarkup = 1;
 
         this.removeElement = this._removeElement.bind(this);
         this.formatWeightInput = this._formatWeightInput.bind(this);
@@ -26,15 +21,46 @@ export class ConfigureTariffZone {
         this.onChangeInputMarkupCost = this._onChangeInputMarkupCost.bind(this);
     }
 
-    _checkInputOnValid() {
-        console.log('123')
+    _checkInputOnValidBaseCostAndWeightCrossing() {
         const errorBaseCost = this.view.querySelector('.error__base-cost');
-        if (this.view.querySelector('.configured-tariff-zones__input-base-cost').value) {
-            console.log('check1')
-            errorBaseCost.style.display = 'inline'
+        const inputBaseCostValue = this.view.querySelector('.configured-tariff-zones__input-base-cost').value;
+        const errorWeightCrossing = this.view.querySelector('.configured-tariff-zones__error-weight-crossing');
+        const countsInput = this.view.querySelectorAll('.count-input');
+        const countsInputIsValid = this.checkRangeIntersection(countsInput);
+
+        if (!inputBaseCostValue) {
+            errorBaseCost.classList.add('display-inline');
+            errorBaseCost.classList.remove('display-none');
         } else {
-            console.log('check2')
-            errorBaseCost.style.display = 'none'
+            errorBaseCost.classList.remove('display-inline');
+            errorBaseCost.classList.add('display-none');
+        }
+
+        if (countsInputIsValid) {
+            errorWeightCrossing.classList.add('display-inline');
+            errorWeightCrossing.classList.remove('display-none');
+        } else {
+            errorWeightCrossing.classList.remove('display-inline');
+            errorWeightCrossing.classList.add('display-none');
+        }
+    }
+
+    _showPopup() {
+        this._popup = document.querySelector('.section-popup');
+
+        this._popup.style.display = 'flex';
+        setTimeout(() => {
+            this._popup.style.display = 'none';
+        }, 800)
+    }
+
+    async _onClickButtonSave() {
+        this._checkInputOnValidBaseCostAndWeightCrossing()
+        const formValid = await this.formIsValid()
+        if (formValid) {
+            const res = this._createResObj()
+            this._showPopup();
+            console.log(res);
         }
     }
 
@@ -113,6 +139,29 @@ export class ConfigureTariffZone {
             '.configured-tariff-zones__button-base-cost'
         );
         addButton.addEventListener('click', this.addMarkup);
+
+        this.buttonSave.addEventListener('click', async () => this._onClickButtonSave())
+    }
+
+    _createResObj() {
+        const inputWeightFrom = this.view.querySelectorAll('.configured-tariff-zones__input-weight-from');
+        const inputWeightTo = this.view.querySelectorAll('.configured-tariff-zones__input-weight-to');
+        const inputMarkupCost = this.view.querySelectorAll('.input-markup-cost');
+        const extraCharges = [];
+
+        for (let i = 0; i < inputMarkupCost.length; i++) {
+            extraCharges.push({
+                "min_weight": inputWeightFrom[i].value,
+                "max_weight": inputWeightTo[i].value,
+                "charge_value": inputMarkupCost[i].value
+            })
+        }
+
+        return {
+            'rate_area_id': this.id,
+            'base_charge_value': this.view.querySelector('.configured-tariff-zones__input').value,
+            'extra_charges': extraCharges
+        }
     }
 
     createElement() {
@@ -135,8 +184,6 @@ export class ConfigureTariffZone {
         this.view.append(markupCostResult);
 
         this._setListenerMarkup(markup, markupCostResult);
-
-        this.countMarkup++;
     }
 
     _removeMarkup(markup) {
@@ -151,6 +198,39 @@ export class ConfigureTariffZone {
         } else {
             markupCostResult.textContent = null;
         }
+    }
+
+    _checkInputOnValidMarkup(markup) {
+        const inputWeightFromValue = markup.querySelector('.configured-tariff-zones__input-weight-from').value;
+        const inputWeightToValue = markup.querySelector('.configured-tariff-zones__input-weight-to').value;
+        const inputCostValue = markup.querySelector('.configured-tariff-zones__input-cost').value;
+
+        const errorWeightFrom = markup.querySelector('.error__weight-from');
+        const errorWeightTo = markup.querySelector('.error__weight-to');
+        const errorMarkupCost = markup.querySelector('.error__markup-cost');
+
+        if (!inputWeightFromValue) {
+            errorWeightFrom.classList.add('display-inline')
+            errorWeightFrom.classList.remove('display-none');
+        } else {
+            errorWeightFrom.classList.add('display-none')
+            errorWeightFrom.classList.remove('display-inline');
+        }
+        if (!inputWeightToValue) {
+            errorWeightTo.classList.add('display-inline')
+            errorWeightTo.classList.remove('display-none');
+        } else {
+            errorWeightTo.classList.add('display-none')
+            errorWeightTo.classList.remove('display-inline');
+        }
+        if (!inputCostValue) {
+            errorMarkupCost.classList.add('display-inline')
+            errorMarkupCost.classList.remove('display-none');
+        } else {
+            errorMarkupCost.classList.add('display-none')
+            errorMarkupCost.classList.remove('display-inline');
+        }
+
     }
 
     _setListenerMarkup(markup, markupCostResult) {
@@ -196,5 +276,7 @@ export class ConfigureTariffZone {
         costInput.addEventListener('change', (e) =>
             this._onChangeInputMarkupCost(e, markupCostResult)
         );
+
+        this.buttonSave.addEventListener('click', () => this._checkInputOnValidMarkup(markup))
     }
 }

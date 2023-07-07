@@ -7,7 +7,7 @@ export class SaveButton {
     }
 
     _buttonClick() {
-        this.handelClick();
+        this.handelClick()
     }
 
     setListener() {

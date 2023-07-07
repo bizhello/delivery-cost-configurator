@@ -504,6 +504,10 @@ template {
   display: block;
 }
 
+.display-inline {
+  display: inline;
+}
+
 .display-none {
   display: none;
 }

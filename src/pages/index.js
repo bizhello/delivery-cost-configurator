@@ -6,13 +6,11 @@ import { FindZone } from '../components/FindZone'
 import { MountElement } from '../components/mountElement';
 import { TariffZone } from '../components/TariffZone';
 import { ConfigureTariffZone } from '../components/ConfigureTariffZone'
-import { SaveButton } from '../components/SaveButton'
 
 const searchTariffZoneInput = document.querySelector('.search-tariff-zone__input');
 const searchTariffZoneLists = document.querySelector('.search-tariff-zone__lists');
 const searchTariffZoneTriangle = document.querySelector('.search-tariff-zone__triangle');
 const configuredTariffZones = document.querySelector('.configured-tariff-zones');
-const sectionSaveButton = document.querySelector('.section-save__button');
 const sectionSave = document.querySelector('.section-save');
 
 //Список Тарифный Зон
@@ -31,8 +29,6 @@ function initialZones() {
 
 //Добавляем логику поиска
 const findZone = new FindZone(searchTariffZoneInput, searchTariffZoneTriangle, handleButtonSearch, tariffZonesArr, openTariffZones);
-//Создание кнопки сохранения форм
-const saveButton = new SaveButton(sectionSaveButton, onClickSaveButton)
 
 //нажатие на Кнопку добавить/удалить у Тарифной Зоны
 function handleButtonZone(id, name) {
@@ -48,7 +44,7 @@ function handleButtonZone(id, name) {
 
 //Cоздание формы
 function createForm(id, name) {
-    const configureTariffZone = new ConfigureTariffZone(id, name, removeForm, onClickSaveButton).createElement();
+    const configureTariffZone = new ConfigureTariffZone(id, name, removeForm, checkRangeIntersection, formIsValid).createElement();
 
     return configureTariffZone;
 }
@@ -118,9 +114,38 @@ function openTariffZones() {
     openElement(searchTariffZoneLists)
 }
 
-//Нажатие на сохранени кнопки: 'Сохранить изменения'
-function onClickSaveButton() {
-    console.log('click button SAVE-BUTTON')
+//проверка в маркапе что диапозоны не пересекаются
+function checkRangeIntersection(countsInput) {
+    let arr = []
+    for (let i = 0; i < countsInput.length; i = i + 2) {
+        arr.push({ min: Number(countsInput[i].value), max: Number(countsInput[i + 1].value) })
+    }
+    for (let i = 0; i < arr.length; i++) {
+        const current = arr[i];
+        for (let j = i + 1; j < arr.length; j++) {
+            const compare = arr[j];
+            if (
+                (current.min >= compare.min && current.min <= compare.max) ||
+                (current.max >= compare.min && current.max <= compare.max)
+            ) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+//проверка формы на ошибки
+async function formIsValid() {
+    const errors = document.querySelectorAll('.error')
+
+    for (let i of errors) {
+        if (i.classList.contains('display-inline')) {
+            return false
+        }
+    }
+
+    return true
 }
 
 //Выполнение функционала: 
@@ -129,5 +154,3 @@ function onClickSaveButton() {
 initialZones();
 //Добавляем логику поиска
 findZone.setListener();
-//Слушаем кнопку сохранения форм
-saveButton.setListener();

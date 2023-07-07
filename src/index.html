@@ -1,116 +1,99 @@
 <!DOCTYPE html>
 <html lang="ru">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>vanila JS</title>
-  </head>
 
-  <body>
-    <div class="container">
-      <header class="header">
-        <h1 class="header__title">Конфигуратор стоимости доставки товара</h1>
-        <h2 class="header__description">
-          Конфигуратор стоимости доставки товара в разные регионы с наценками за
-          вес посылки
-        </h2>
-      </header>
-      <main class="main">
-        <section class="section search-tariff-zone">
-          <input
-            class="input search-tariff-zone__input"
-            type="text"
-            placeholder="Искать тарифную зону по названию..."
-          />
-          <div class="search-tariff-zone__triangle"></div>
-          <ul class="ul search-tariff-zone__lists"></ul>
-        </section>
-        <section class="section configured-tariff-zones display-none"></section>
-        <section class="section display-none section-save">
-          <button class="button section-save__button">
-            Сохранить изменения
-          </button>
-        </section>
-        <section class="section-popup display-none">
-          <div class="popup">
-            <h3 class="popup__title">Сохранено</h3>
-          </div>
-        </section>
-      </main>
-      <footer class="footer">
-        <p class="p footer__text">Разработчик: Бижов Андрей</p>
-        <p class="p footer__text">
-          Github:
-          <a
-            class="footer__link"
-            href="https://github.com/bizhello"
-            target="_blank"
-            >https://github.com/bizhello</a
-          >
-        </p>
-        <p class="p footer__text">&copy; 2023</p>
-      </footer>
-      <template class="template">
-        <article class="article template__article">
-          <div class="flex">
-            <p class="p configured-tariff-zones__name"></p>
-            <button class="button configured-tariff-zones__del">Удалить</button>
-          </div>
-          <div class="flex border-top configured-tariff-zones__base-cost">
-            <div class="position-relative">
-              <p class="p">Базовая стоимость доставки</p>
-              <p class="p error error__base-cost">
-                Укажите базовую стоимость
-              </p>
-              <input
-                class="input cost-input configured-tariff-zones__input configured-tariff-zones__input-base-cost"
-                type="text"
-                placeholder="..."
-              />
-              <p class="p">P</p>
-            </div>
-            <button class="button configured-tariff-zones__button-base-cost">
-              Добавить наценку
-            </button>
-          </div>
-          <p
-            class="p error"
-            id="configured-tariff-zones__error-weight-crossing"
-            style="position: initial"
-          >
-            Диапазоны веса перекрываются
-          </p>
-        </article>
-      </template>
-      <template class="template-markup">
-        <div class="flex border-top segment">
-          <div class="position-relative">
-            <input
-              class="input configured-tariff-zones__input count-input input-error configured-tariff-zones__input-weight-from"
-              placeholder="..."
-            />
-            <p class="p">кг -</p>
-            <p class="p error error__weight-from">Укажите вес</p>
-            <input
-              class="input configured-tariff-zones__input count-input input-error configured-tariff-zones__input-weight-to"
-              placeholder="..."
-            />
-            <p class="p">кг</p>
-            <p class="p error error__weight-to">Укажите вес</p>
-          </div>
-          <div class="position-relative">
-            <input
-              class="input configured-tariff-zones__input cost-input input-markup-cost input-error configured-tariff-zones__input-cost"
-              placeholder="..."
-            />
-            <p class="p" style="margin-right: 10px">P</p>
-            <button class="button remove-markup">Удалить наценку</button>
-            <p class="p error error__markup-cost">Укажите наценку</p>
-          </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>vanila JS</title>
+</head>
+
+<body>
+  <div class="container">
+    <header class="header">
+      <h1 class="header__title">Конфигуратор стоимости доставки товара</h1>
+      <h2 class="header__description">
+        Конфигуратор стоимости доставки товара в разные регионы с наценками за
+        вес посылки
+      </h2>
+    </header>
+    <main class="main">
+      <section class="section search-tariff-zone">
+        <input class="input search-tariff-zone__input" type="text" placeholder="Искать тарифную зону по названию..." />
+        <div class="search-tariff-zone__triangle"></div>
+        <ul class="ul search-tariff-zone__lists"></ul>
+      </section>
+      <section class="section configured-tariff-zones display-none"></section>
+      <section class="section display-none section-save">
+        <button class="button section-save__button">
+          Сохранить изменения
+        </button>
+      </section>
+      <section class="section-popup display-none" style="display:none">
+        <div class="popup">
+          <h3 class="popup__title">Сохранено</h3>
         </div>
-        <p class="p configured-tariff-zones__result"></p>
-      </template>
-    </div>
-  </body>
+      </section>
+    </main>
+    <footer class="footer">
+      <p class="p footer__text">Разработчик: Бижов Андрей</p>
+      <p class="p footer__text">
+        Github:
+        <a class="footer__link" href="https://github.com/bizhello" target="_blank">https://github.com/bizhello</a>
+      </p>
+      <p class="p footer__text">&copy; 2023</p>
+    </footer>
+    <template class="template">
+      <article class="article template__article">
+        <div class="flex">
+          <p class="p configured-tariff-zones__name"></p>
+          <button class="button configured-tariff-zones__del">Удалить</button>
+        </div>
+        <div class="flex border-top configured-tariff-zones__base-cost">
+          <div class="position-relative">
+            <p class="p">Базовая стоимость доставки</p>
+            <p class="p error error__base-cost display-none">
+              Укажите базовую стоимость
+            </p>
+            <input class="input cost-input configured-tariff-zones__input configured-tariff-zones__input-base-cost"
+              type="text" placeholder="..." />
+            <p class="p">P</p>
+          </div>
+          <button class="button configured-tariff-zones__button-base-cost">
+            Добавить наценку
+          </button>
+        </div>
+        <p class="p error configured-tariff-zones__error-weight-crossing display-none" style="position: initial">
+          Диапазоны веса перекрываются
+        </p>
+      </article>
+    </template>
+    <template class="template-markup">
+      <div class="flex border-top segment">
+        <div class="position-relative">
+          <input
+            class="input configured-tariff-zones__input count-input input-error configured-tariff-zones__input-weight-from"
+            placeholder="..." />
+          <p class="p">кг -</p>
+          <p class="p error error__weight-from display-none">Укажите вес</p>
+          <input
+            class="input configured-tariff-zones__input count-input input-error configured-tariff-zones__input-weight-to"
+            placeholder="..." />
+          <p class="p">кг</p>
+          <p class="p error error__weight-to display-none">Укажите вес</p>
+        </div>
+        <div class="position-relative">
+          <input
+            class="input configured-tariff-zones__input cost-input input-markup-cost input-error configured-tariff-zones__input-cost"
+            placeholder="..." />
+          <p class="p" style="margin-right: 10px">P</p>
+          <button class="button remove-markup">Удалить наценку</button>
+          <p class="p error error__markup-cost display-none">Укажите наценку</p>
+        </div>
+      </div>
+      <p class="p configured-tariff-zones__result"></p>
+    </template>
+  </div>
+</body>
+
 </html>
